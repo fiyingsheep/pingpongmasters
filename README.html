@@ -1,1 +1,1200 @@
-# pingpongmasters
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pingpongmasters</title>
+<style media="screen">
+html, body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  font-size: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  overflow: hidden;
+}
+#wrapper {
+  display: block;
+  position: relative;
+  
+}
+.loading #wrapper {
+  visibility: hidden;
+}
+#monitors {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+
+#wrapper {
+  width: 100vw;
+  height: 75vw;
+}
+@media (min-aspect-ratio: 480/360) {
+  #wrapper {
+    height: 100vh;
+    width: 133.33333333333334vh;
+  }
+}
+
+#stage {
+  width: 100%;
+  height: 100%;
+}
+
+#loading-progress {
+  color: #0ff;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  font-size: 16px;
+}
+
+
+#loading-image {
+  position: fixed;
+  max-width: 100%;
+  max-height: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+
+#fullscreen-btn {
+  -webkit-appearance: none;
+  border: none;
+  background: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 24px;
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"%3E%3Cpath d="M14 28h-4v10h10v-4h-6v-6zm-4-8h4v-6h6v-4H10v10zm24 14h-6v4h10V28h-4v6zm-6-24v4h6v6h4V10H28z" fill="%23fff"/%3E%3C/svg%3E');
+  background-color: rgba(0, 0, 0, 0.5);
+  border-bottom-left-radius: 10px;
+}
+.fullscreen #fullscreen-btn {
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"%3E%3Cpath d="M10 32h6v6h4V28H10v4zm6-16h-6v4h10V10h-4v6zm12 22h4v-6h6v-4H28v10zm4-22v-6h-4v10h10v-4h-6z" fill="%23fff"/%3E%3C/svg%3E');
+}
+
+.monitor {
+  position: absolute;
+  border: 1px solid transparent;
+  
+  border-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.3);
+  
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  overflow: hidden;
+  padding: 3px;
+  color: #ffffff;
+  white-space: pre;
+}
+.monitor-label {
+  margin: 0 5px;
+  font-weight: bold;
+}
+.monitor-value {
+  display: inline-block;
+  vertical-align: top;
+  min-width: 34px;
+  text-align: center;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: text;
+  transform: translateZ(0);
+}
+.default .monitor-value, .slider .monitor-value {
+   background-color: rgba(0, 0, 0, 0.5); 
+  margin: 0 5px;
+  padding: 1px 3px;
+}
+.large {
+   background-color: rgba(0, 0, 0, 0.6); 
+  padding: 0.1rem 0.25rem;
+  min-width: 3rem;
+}
+.large .monitor-label {
+  display: none;
+}
+.large .monitor-value {
+  font-size: 1rem;
+  width: 100%;
+}
+.list {
+  padding: 0;
+  overflow: auto;
+  overflow-x: hidden;
+}
+.list .monitor-label {
+  text-align: center;
+  padding: 3px;
+  width: 100%;
+  display: block;
+  margin: 0;
+  box-sizing: border-box;
+  white-space: pre-wrap;
+}
+.list .monitor-value {
+  display: block;
+}
+.row {
+  margin: 2px 5px;
+  transform: translateZ(0);
+  text-align: left;
+  border-radius: 0.25rem;
+  border: 1px solid transparent;
+  
+  border-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.5);
+  
+  height: 20px;
+  line-height: 20px;
+  padding: 0 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.default .monitor-value, .slider .monitor-value, .large, .row {
+  background-color: #ffffff;
+}
+
+.slider input {
+  display: block;
+  width: 100%;
+  transform: translateZ(0);
+}
+#asking-box {
+  display: none;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(33, 33, 33, 0.7);
+}
+.asking #asking-box {
+  display: block;
+}
+#question {
+  display: block;
+  margin: 0 10px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: white;
+}
+#answer {
+  border: none;
+  background: none;
+  width: 100%;
+  font: inherit;
+  font-size: 16px;
+  color: white;
+  padding: 10px;
+  box-sizing: border-box;
+}
+#answer:focus {
+  outline: none;
+}
+</style>
+</head>
+<body class="loading">
+<script type="text/javascript">
+if (true  && false ) {
+  document.body.classList.remove('loading');
+}
+</script>
+<div id="wrapper">
+<canvas id="stage"></canvas>
+<div id="monitors"></div>
+<div id="asking-box">
+<label id="question" for="answer">Question</label>
+<input type="text" id="answer">
+</div>
+</div>
+
+
+<span id="loading-progress">...</span>
+
+
+<img src="data:image/png;base6ORK5CYII=" id="loading-image">
+
+
+<button id="fullscreen-btn"></button>
+
+<script type="text/javascript">
+var TYPE = 'json',
+PROJECT_JSON = "data:applicatiLjExMSBTYWZhcmkvNTM3LjM2In19",
+ASSETS = {
+  "83a9787d4cb6f3b7632b4ddfebflvTd9df5H/+OBJcIFwqKCFUEYf4=",
+  "6a10c380af8c400f8f6eea84eb2AAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+  "238ec94e1361aa2e5987d47b595AAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "b348d823650c7c3addea3bb9035AAAAAAAAAAAAAAAAAAAAAAAAAA==",
+  "ff4207df18aabce8ea63ec78855VVVVVVVVVVVVVVVVVVVVVVVVVVU=",
+  "3c4d25e96bfba374775a29eb79bAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+  "d909a3c3050320f910c3eb8969dAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+  "c3e2f27958c889e74d25dd39867AAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "f0d12228a9edff67703674dbc23dGV4dD48L2c+PC9nPjwvc3ZnPg==",
+  "30a9b8f1ff5352585e6efcbc28bMDAwMCIvPjwvZz48L2c+PC9zdmc+",
+  "3375973ab3555f06d977d0a31e6Lz48L2c+PC9nPjwvZz48L3N2Zz4=",
+  "a21a873824ceb2a1329428d6eccb25lIi8+PC9nPjwvZz48L3N2Zz4=",
+  "9dd97f92177cbbf8089ccda5bbcbH0iLz48L2c+PC9nPjwvc3ZnPg==",
+  "469684f7fa1a6880475bed91208OjB9Ii8+PC9nPjwvZz48L3N2Zz4=",
+  "2db8fd86bad2a2ea3ff7768e609L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "0bfc0b9d340da43a2597321ca8ePSIwIi8+PC9nPjwvZz48L3N2Zz4=",
+  "8d949b85989beb8b2d63e5c6154IjAiLz48L2c+PC9nPjwvc3ZnPg==",
+  "481b9a386ac63fa3f8ee9cf6fd0IjAuNSIvPjwvZz48L2c+PC9zdmc+",
+  "9783005c5d23f34216f929ba4fddXR0Ii8+PC9nPjwvZz48L3N2Zz4=",
+  "65ebd864793f5c6e7917729b434bUNDIi8+PC9nPjwvZz48L3N2Zz4=",
+  "24bbcc2c3b19660e18393d0099bbm9uZSIvPjwvZz48L2c+PC9zdmc+",
+  "7c2d35d7f88de23a5849fbe89e9dGV4dD48L2c+PC9nPjwvc3ZnPg==",
+  "379e8a20993f708c0ec6c678cf2IjAiLz48L2c+PC9nPjwvc3ZnPg==",
+  "b42d7109de846243b78988a8cf7aD0iMCIvPjwvZz48L2c+PC9zdmc+",
+  "492e3b1f42fb25ded8f735c06b1Ii8+PC9nPjwvZz48L2c+PC9zdmc+",
+  "cd8cbe93faa72edf8c2dfa6d975YnV0dCIvPjwvZz48L2c+PC9zdmc+",
+  "87b8320606a9b3e7c78052aa5adQ0MiLz48L2c+PC9nPjwvc3ZnPg==",
+  "ec1e5289b62dfd857d52499cf79MjIyeiIvPjwvZz48L2c+PC9zdmc+",
+  "61e53fd66a7d0dac0ba9409c961dWxsfSIvPjwvZz48L2c+PC9zdmc+",
+  "4294002f367652adc5315c49adbbGx9Ii8+PC9nPjwvZz48L3N2Zz4=",
+  "2209d4867a65539ac4124413159dWxsfSIvPjwvZz48L2c+PC9zdmc+",
+  "58373e1d9e5b329410d41a3069fdWxsfSIvPjwvZz48L2c+PC9zdmc+",
+  "89aafeb0875fcd722dfeb6699d8dWxsfSIvPjwvZz48L2c+PC9zdmc+",
+  "cd21514d0531fdffb22204e0ec5bWl0LmVkdS8gLS0+Cjwvc3ZnPg==",
+  "ece6ca324037c191a1888f08c02L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "0deb949bb995ef25fc74f449b08L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "f3c314b4b8762f95d69dc3d5f75L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "428e28da7737e4138aa71de9471PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "3ad5e82b1292c88664f52b74124L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "db1b6d11c7d7c415dc19831ec70L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "808cdefa206aebcfabdf6a410edL3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "5a7fae2e8518cee201ebc1e3556PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "38c4bdaed8ee4340938f0e4e363L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "06186a5bd81edbb24fa92e1aeb2L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "edb1080733a194a13303c53288dL3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "ad87f5ab62f914480961238a67eL3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "e7439752c7fea7aa5540f3e5b80PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "378a584d968642f79fcb7dce561PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "371f4fc1335fcd98ab8e1f248acPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "aaaf346f3ec91e31c897b543eacPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "b4a0bbacea7abb07884a75b8fbaPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "24efdfa2d034f0f3d56adb76253PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "a30837edeb4f7deaaa481b91fb7L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "a620d66d86574270ddf51baedb6L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "ee336546d89bd35a3bade1464c8PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "e747d52da7972243e342de18b6fPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "6f4b087894129ea723709d8a01bPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "0b11a74a6d1d029ce3043b9aa03PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "3da737ca793952db1b2a6ff9fd3PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "1bc730fb27a6de9d4db5c556da2PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "0a080569ae04f22fdca08a25ef0PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "1215b68c5603d8bc2e32a257fdcPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "3e1aa38c638a42f58b0ebc0e0b3PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "3d1f17d50ed62900a9f9499379bPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "9bfd5fd2dcfcdfad937416842e2PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "f63140a541edefa492286be4893PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "2fc2a3ef493ca52e4ed8a2a120bPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "1eb6133af31daacf1a78ca2c1c1eHQ+PC9nPjwvZz48L2c+PC9zdmc+",
+  "8468073800cec00a94f48a84c77dHQiLz48L2c+PC9nPjwvc3ZnPg==",
+  "73da6f904b9565576f8aaeded8cLjUiLz48L2c+PC9nPjwvc3ZnPg==",
+  "18be149d33683be6ef895f6426eLz48L2c+PC9nPjwvZz48L3N2Zz4=",
+  "c5653a439940e4bb63eefd366b0PjwvZz48L2c+PC9nPjwvc3ZnPg==",
+  "55d77d333953d87209a8e7a44ddPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "a5ab57b0cdecfdc86139cd5489dLz48L2c+PC9nPjwvZz48L3N2Zz4=",
+  "04d59170d548db37df5eb5a0f9daD0iMCIvPjwvZz48L2c+PC9zdmc+",
+  "0b67fb5c7ffd9ca4641b52bbf58IjAiLz48L2c+PC9nPjwvc3ZnPg==",
+  "14e46ec3e2ba471c2adfe8f1190b2RlOiBub3JtYWwiLz48L3N2Zz4=",
+  "bb50900e03e0aa5b6608ec6361daD0iMCIvPjwvZz48L2c+PC9zdmc+",
+  "34cdb219ccdb92895849e4a6d64aD0iMCIvPjwvZz48L2c+PC9zdmc+",
+  "343ea7bc597d8d0da4de0e2b538b3VuZCIvPjwvZz48L2c+PC9zdmc+",
+  "b6175c3316784ca287b34e93dcbPSIwIi8+PC9nPjwvZz48L3N2Zz4=",
+  "f7ef3a638e6c8aeb93ee36b8d19aD0iMCIvPjwvZz48L2c+PC9zdmc+",
+  "dd1e062e24d21f266b6028ae46cL3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "66e025d71147de7b54621c1cd26L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "a4d11408ad9a958ea915df8539aIjAiLz48L2c+PC9nPjwvc3ZnPg==",
+  "fefa29727a367b44425b08414d5PSIwIi8+PC9nPjwvZz48L3N2Zz4=",
+  "cb672ee09aba714bf1311e70464bmQiLz48L2c+PC9nPjwvc3ZnPg==",
+  "5c973f4caea1d7b3ab78855c45bIjAiLz48L2c+PC9nPjwvc3ZnPg==",
+  "71b663987ca73fca1765a75986aaD0iMCIvPjwvZz48L2c+PC9zdmc+",
+  "0f4c41b700b24e1c7df04a59903L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "c3451af4408f2cd6b088894f51bPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "93333f1def2bff4a5eabe4113f3dW5kIi8+PC9nPjwvZz48L3N2Zz4=",
+  "d85f2becee6683438a4dddcf9efPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "ca5d63723758011fbc4fea551b5PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "372edd965f42a1a4d4c5917e344PSI1Ii8+PC9nPjwvZz48L3N2Zz4=",
+  "202ad9f3be897054a76bff8ebeaPSI1Ii8+PC9nPjwvZz48L3N2Zz4=",
+  "b2596227b6b4b7f6fbe4960d72fbmQiLz48L2c+PC9nPjwvc3ZnPg==",
+  "97f1584ed16c5d5fb8072220c98aD0iNSIvPjwvZz48L2c+PC9zdmc+",
+  "f863c20bee404ed14cdc8da8344PSI1Ii8+PC9nPjwvZz48L3N2Zz4=",
+  "30cae1c12ad055ae177b08f5430aD0iNSIvPjwvZz48L2c+PC9zdmc+",
+  "9f47484694207e95a0992a2e597IjUiLz48L2c+PC9nPjwvc3ZnPg==",
+  "abbe6cc421abbce40839f09f2b5b3VuZCIvPjwvZz48L2c+PC9zdmc+",
+  "1fed56bd784b6ff5b6bb6ef1019IjUiLz48L2c+PC9nPjwvc3ZnPg==",
+  "e4b7c271d7a5b54fa3a5c8e7682aD0iNSIvPjwvZz48L2c+PC9zdmc+",
+  "1822d69298711512992a741c8f6IjAuNSIvPjwvZz48L2c+PC9zdmc+",
+  "e7a09bbfc0381bf6e85930557e0IjAuNSIvPjwvZz48L2c+PC9zdmc+",
+  "4b35564c23ada36ad5264824f46dXR0Ii8+PC9nPjwvZz48L3N2Zz4=",
+  "5d1325d947b6b1831df2ec243bbL3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "7fa2572d7d30e5af49372a57314PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "2ee9ee8da2ee8714b1e8f9924d5Zz09Ii8+PC9nPjwvZz48L3N2Zz4=",
+  "87a6659b12d1460adead4784175dHQiLz48L2c+PC9nPjwvc3ZnPg==",
+  "063d695426ee7fa24851a2790acdGV4dD48L2c+PC9nPjwvc3ZnPg==",
+  "bf5ad69fbd6db57987c08c458c7Lz48L2c+PC9nPjwvZz48L3N2Zz4=",
+  "91d8e410b411de9bacdcb1b95efdGV4dD48L2c+PC9nPjwvc3ZnPg==",
+  "eeceb181ced8e139fc236f06a3aPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "45073410a297b3b5b880a45045ePC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "95bca13be39ae58f1e92a9623a1PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "574760dac515177004dae3e67b1PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "5c8a0b1967ca3cd127e5a0f86d9dGV4dD48L2c+PC9nPjwvc3ZnPg==",
+  "2e96d0ad12b91b6fb0b218eba2fPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "0a136dcf40449bc32ccb64e5cd5PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "40339b3b1d79db182b6873ff27ePC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "11285bd74f0afc2b855c0acf302PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "de09d71e1e53e62726a920873c4L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "a06ca61423aea097d62a5b79359L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "b1b0a4332b6f070942237d21c81L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "c340c554e34c5104a7a75816b3bdGV4dD48L2c+PC9nPjwvc3ZnPg==",
+  "f256489bee144daef4e3813ca2ddGV4dD48L2c+PC9nPjwvc3ZnPg==",
+  "6a5e6eaf41186fb7fa1873855f7dGV4dD48L2c+PC9nPjwvc3ZnPg==",
+  "0a6799d33d1e1b0c8fc70914630dGV4dD48L2c+PC9nPjwvc3ZnPg==",
+  "02427ee6877adeb52b9b497fb5eL3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "68e42f291739aa965cbd238c8f4PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "818f55be273e7fea69e8e8c9e93b3VuZCIvPjwvZz48L2c+PC9zdmc+",
+  "b614fc445119773e1035dcb5d8cPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "e373bc88c42609af14c11e74d02L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "5a4b3bcca439ce4d05166efee9bPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "0ead35722d82570c96b43aee75ePC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "cae7662c6b3cc225993467902b4b3VuZCIvPjwvZz48L2c+PC9zdmc+",
+  "d344aa019d10905e024b0ffa0f6PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "db4216be720925f3441e63bd263PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "09cf09bd61c9d66c1ab0a253b7aPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "c89f24651c9ee8fa5e37c4e53f9dW5kIi8+PC9nPjwvZz48L3N2Zz4=",
+  "829cf09fe240128ab684295131bdGV4dD48L2c+PC9nPjwvc3ZnPg==",
+  "5712d39a5974d8d23b45eb61e00dGV4dD48L2c+PC9nPjwvc3ZnPg==",
+  "22d84ed57717448dd96bc3d9a4fPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "ebe563e873fd359df1ff24c3664PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "5476bd371f7382889f26eef333cb3VuZCIvPjwvZz48L2c+PC9zdmc+",
+  "5609c86f620ee43379733e434b2Lz48L2c+PC9nPjwvZz48L3N2Zz4=",
+  "f2f33a209d3efc6918f6a2efc7fPjwvZz48L2c+PC9nPjwvc3ZnPg==",
+  "c0e7b1d2792743c95af89a19b3bL3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "e3dc7b16a074d380ee9497f63cdL3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "d92fee6b49fac0943d063da7332PjwvZz48L2c+PC9nPjwvc3ZnPg==",
+  "4cb02a233b1066a8cd233b47a54dW5kIi8+PC9nPjwvZz48L3N2Zz4=",
+  "e0b1b04433786c30446c53426a0PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "2f81f6dfae2926fbfe9da1e0c4bL3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "ccafa2ffb42ddfe8afa592a767aPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "7c98e76683702d5a432b9b4a1fcaD0iNSIvPjwvZz48L2c+PC9zdmc+",
+  "4dd4796dc14e04a5f4a0b31f1d9dXR0Ii8+PC9nPjwvZz48L3N2Zz4=",
+  "27e8e38f68da442039f0efa1f7aYnV0dCIvPjwvZz48L2c+PC9zdmc+",
+  "29ea0c30bb7cbb9f6a6f9813877L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "4654b9f7803367ccea82bd92e4bIjUuNSIvPjwvZz48L2c+PC9zdmc+",
+  "188b10c1358f73cdf6930d32a0bLjUiLz48L2c+PC9nPjwvc3ZnPg==",
+  "51b4166cd071a75955b725b7175dGggZD0iIi8+PC9nPjwvc3ZnPg==",
+  "6e19cece8450160ad143b0d7630b3VuZCIvPjwvZz48L2c+PC9zdmc+",
+  "23aef1578b6efb86de184d8a7f8bmQiLz48L2c+PC9nPjwvc3ZnPg==",
+  "f876a172854eb812ac905f9d867PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "f4b7d425aecb1f83c83c63fccefPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "9cb0e814ba788581fff8bf86c94L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "8687dfcdc01a8589ffb501b4480dGV4dD48L2c+PC9nPjwvc3ZnPg==",
+  "9737c2353897438f3506a7c07c4L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "367486c05627fd7348cf3cd782aPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "acc1d20929adaab5fefba40ec6bPC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "4861b9fa0ea30fa81a8a82466d4dGV4dD48L2c+PC9nPjwvc3ZnPg==",
+  "452d2f321cfa04301b386f7e318PjwvZz48L2c+PC9nPjwvc3ZnPg==",
+  "d18aafc87aee5f69d8bbfda2ddbb3VuZCIvPjwvZz48L2c+PC9zdmc+",
+  "11aa97a93f67c447034d08e8125NTd6Ii8+PC9nPjwvZz48L3N2Zz4=",
+  "2dbc7dcc943fd1c886d50268305L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "25c397ab4bbc3ac91b849f3f8e0L3RleHQ+PC9nPjwvZz48L3N2Zz4=",
+  "bcfdc1a5c75632223a5717eb4f0PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "7664d1afe19d62444d40857b729PC90ZXh0PjwvZz48L2c+PC9zdmc+",
+  "99184c9fd82d8763e0bba6633c4dHQiLz48L2c+PC9nPjwvc3ZnPg==",
+  "dd1e9493278aae1795ddb280bb4iYnV0dCIvPjwvZz48L2c+PC9zdmc+"
+},
+DESIRED_USERNAME = "you",
+COMPAT = false,
+TURBO = false,
+PROJECT_ID = "391462490",
+WIDTH = 480,
+HEIGHT = 360,
+EXTENSION_URL = null,
+GENERATED = 1605452092364;
+var VirtualMachine=function(A),e){"use strict";(function(A){
+/*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @license  MIT
+ */
+var t=e(82),n=e(165),g=e(83);f;A.exports=g},function(A,B,e){
+/*!
+ * @license twgl.js 4.4.0 Copyright (c) 2015, Gregg Tavares All Rights Reserved.
+ * Available via the MIT license.
+ * see: http://github.com/greggman/twgl.js for details
+ */
+!function(B,e){A.exports=e()}(__WEBPACK_AMD_DEFINE_RESULT__;
+/**
+ * [js-md5]{@link https://github.com/emn178/js-md5}
+ *
+ * @namespace md5
+ * @version 0.7.3
+ * @author Chen, Yi-Cyuan [emn178@gmail.com]
+ * @copyright Chen, Yi-Cyuan 2014-2017
+ * @license MIT
+ */
+/**
+ * [js-md5]{@link https://github.com/emn178/js-md5}
+ *
+ * @namespace md5
+ * @version 0.7.3
+ * @author Chen, Yi-Cyuan [emn178@gmail.com]
+ * @copyright Chen, Yi-Cyuan 2014-2017
+ * @license MIT
+ */
+!function(){"use strict";var E__WEBPACK_AMD_DEFINE_RESULT__;
+/**
+ * [js-md5]{@link https://github.com/emn178/js-md5}
+ *
+ * @namespace md5
+ * @version 0.7.3
+ * @author Chen, Yi-Cyuan [emn178@gmail.com]
+ * @copyright Chen, Yi-Cyuan 2014-2017
+ * @license MIT
+ */
+/**
+ * [js-md5]{@link https://github.com/emn178/js-md5}
+ *
+ * @namespace md5
+ * @version 0.7.3
+ * @author Chen, Yi-Cyuan [emn178@gmail.com]
+ * @copyright Chen, Yi-Cyuan 2014-2017
+ * @license MIT
+ */
+!function(){"use strict";var Enction"==typeof A?function(B){
+//!! Deliberately using an API that's deprecated in node.js because
+//!! this file is for browsers and we expect them to cope with it.
+//!! Discussion: github.com/node-browser-compat/atob/pull/9
+return new A(B,"base64").toStrcostumes",B)}}},function(A,B){
+/*! @source http://purl.eligrey.com/github/canvas-toBlob.js/blob/master/canvas-toBlob.js */
+!function(A){"use strict";var )}},function(A,B,e){var t,n,g;
+/**
+ *  StartAudioContext.js
+ *  @author Yotam Mann
+ *  @license http://opensource.org/licenses/MIT MIT License
+ *  @copyright 2016 Yotam Mann
+ */n=[],void 0===(g="function".ScratchSVGRenderer=e(147)}]);
+
+/* https://www.npmjs.com/package/get-user-media-promise */
+!function(e){"use strict";funcvices.getUserMedia=s))}(this);
+
+/* https://github.com/LLK/scratch-gui/blob/7b658c60c7c04055e575601a861195fe6c9933f3/src/lib/video/camera.js */
+const requestStack = [];
+const requestVideoStream = videoDesc => {
+    let streamPromise;
+    if (requestStack.length === 0) {
+        streamPromise = navigator.mediaDevices.getUserMedia({
+            audio: false,
+            video: videoDesc
+        });
+        requestStack.push(streamPromise);
+    } else if (requestStack.length > 0) {
+        streamPromise = requestStack[0];
+        requestStack.push(true);
+    }
+    return streamPromise;
+};
+
+const requestDisableVideo = () => {
+    requestStack.pop();
+    if (requestStack.length > 0) return false;
+    return true;
+};
+
+/* https://github.com/LLK/scratch-gui/blob/7b658c60c7c04055e575601a861195fe6c9933f3/src/lib/video/video-provider.js */
+class VideoProvider {
+    constructor () {
+        this.mirror = true;
+
+        this._frameCacheTimeout = 16;
+
+        this._video = null;
+
+        this._track = null;
+
+        this._workspace = [];
+    }
+
+    static get FORMAT_IMAGE_DATA () {
+        return 'image-data';
+    }
+
+    static get FORMAT_CANVAS () {
+        return 'canvas';
+    }
+
+    static get DIMENSIONS () {
+        return [WIDTH, HEIGHT];
+    }
+
+    static get ORDER () {
+        return 1;
+    }
+
+    get video () {
+        return this._video;
+    }
+
+    enableVideo () {
+        this.enabled = true;
+        return this._setupVideo();
+    }
+
+    disableVideo () {
+        this.enabled = false;
+        if (this._singleSetup) {
+            this._singleSetup
+                .then(this._teardown.bind(this))
+                .catch(err => this.onError(err));
+        }
+    }
+
+    _teardown () {
+        if (this.enabled === false) {
+            const disableTrack = requestDisableVideo();
+            this._singleSetup = null;
+            this._video = null;
+            if (this._track && disableTrack) {
+                this._track.stop();
+            }
+            this._track = null;
+        }
+    }
+
+    getFrame ({
+        dimensions = VideoProvider.DIMENSIONS,
+        mirror = this.mirror,
+        format = VideoProvider.FORMAT_IMAGE_DATA,
+        cacheTimeout = this._frameCacheTimeout
+    }) {
+        if (!this.videoReady) {
+            return null;
+        }
+        const [width, height] = dimensions;
+        const workspace = this._getWorkspace({dimensions, mirror: Boolean(mirror)});
+        const {videoWidth, videoHeight} = this._video;
+        const {canvas, context, lastUpdate, cacheData} = workspace;
+        const now = Date.now();
+
+        if (lastUpdate + cacheTimeout < now) {
+
+            if (mirror) {
+                context.scale(-1, 1);
+                context.translate(width * -1, 0);
+            }
+
+            context.drawImage(this._video,
+                0, 0, videoWidth, videoHeight,
+                0, 0, width, height
+            );
+
+            context.setTransform(1, 0, 0, 1, 0, 0);
+            workspace.lastUpdate = now;
+        }
+
+        if (!cacheData[format]) {
+            cacheData[format] = {lastUpdate: 0};
+        }
+        const formatCache = cacheData[format];
+
+        if (formatCache.lastUpdate + cacheTimeout < now) {
+            if (format === VideoProvider.FORMAT_IMAGE_DATA) {
+                formatCache.lastData = context.getImageData(0, 0, width, height);
+            } else if (format === VideoProvider.FORMAT_CANVAS) {
+                formatCache.lastUpdate = Infinity;
+                formatCache.lastData = canvas;
+            } else {
+                console.error(`video io error - unimplemented format ${format}`);
+                formatCache.lastUpdate = Infinity;
+                formatCache.lastData = null;
+            }
+
+            formatCache.lastUpdate = Math.max(workspace.lastUpdate, formatCache.lastUpdate);
+        }
+
+        return formatCache.lastData;
+    }
+
+    onError (error) {
+        console.error('Unhandled video io device error', error);
+    }
+
+    _setupVideo () {
+        if (this._singleSetup) {
+            return this._singleSetup;
+        }
+
+        this._singleSetup = requestVideoStream({
+            width: {min: WIDTH, ideal: 480 * WIDTH / HEIGHT},
+            height: {min: HEIGHT, ideal: 480}
+        })
+            .then(stream => {
+                this._video = document.createElement('video');
+
+                try {
+                    this._video.srcObject = stream;
+                } catch (error) {
+                    this._video.src = window.URL.createObjectURL(stream);
+                }
+                this._video.play();
+                this._track = stream.getTracks()[0];
+                return this;
+            })
+            .catch(error => {
+                this._singleSetup = null;
+                this.onError(error);
+            });
+
+        return this._singleSetup;
+    }
+
+    get videoReady () {
+        if (!this.enabled) {
+            return false;
+        }
+        if (!this._video) {
+            return false;
+        }
+        if (!this._track) {
+            return false;
+        }
+        const {videoWidth, videoHeight} = this._video;
+        if (typeof videoWidth !== 'number' || typeof videoHeight !== 'number') {
+            return false;
+        }
+        if (videoWidth === 0 || videoHeight === 0) {
+            return false;
+        }
+        return true;
+    }
+
+    _getWorkspace ({dimensions, mirror}) {
+        let workspace = this._workspace.find(space => (
+            space.dimensions.join('-') === dimensions.join('-') &&
+            space.mirror === mirror
+        ));
+        if (!workspace) {
+            workspace = {
+                dimensions,
+                mirror,
+                canvas: document.createElement('canvas'),
+                lastUpdate: 0,
+                cacheData: {}
+            };
+            workspace.canvas.width = dimensions[0];
+            workspace.canvas.height = dimensions[1];
+            workspace.context = workspace.canvas.getContext('2d');
+            this._workspace.push(workspace);
+        }
+        return workspace;
+    }
+}
+
+const Scratch = window.Scratch = window.Scratch || {};
+
+const CLOUD_PREFIX = '\u2601 ';
+
+const runBenchmark = function () {
+  const vm = new window.NotVirtualMachine( WIDTH, HEIGHT );
+  Scratch.vm = vm;
+
+  const storage = new ScratchStorage();
+  Scratch.storage = storage;
+  
+  const AssetType = storage.AssetType;
+  storage.addWebStore([AssetType.Project], () => TYPE === 'zip' ? './project.json' : PROJECT_JSON);
+  storage.addWebStore(
+    [AssetType.ImageVector, AssetType.ImageBitmap, AssetType.Sound],
+    ({ assetId, dataFormat }) => TYPE === 'zip'
+      ? `./${assetId}.${dataFormat}`
+      : ASSETS[`${assetId}.${dataFormat}`]
+  );
+  
+  vm.attachStorage(storage);
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    renderer.resize(rect.width, rect.height);
+    
+    
+    monitorWrapper.style.transform = `scale(${rect.height / HEIGHT})`;
+    
+  }
+  const monitorWrapper = document.getElementById('monitors');
+  const canvas = document.getElementById('stage');
+  const renderer = new window.ScratchRender(canvas  , -WIDTH / 2, WIDTH / 2, -HEIGHT / 2, HEIGHT / 2 );
+  resize();
+  Scratch.renderer = renderer;
+  vm.attachRenderer(renderer);
+
+  const audioEngine = new window.AudioEngine();
+  Scratch.audioEngine = audioEngine;
+  vm.attachAudioEngine(audioEngine);
+
+  const svgRenderer = new ScratchSVGRenderer.SVGRenderer();
+  Scratch.svgRenderer = svgRenderer;
+  vm.attachV2SVGAdapter(svgRenderer);
+
+  const bitmapAdapter = new ScratchSVGRenderer.BitmapAdapter(null, null,  WIDTH, HEIGHT );
+  Scratch.bitmapAdapter = bitmapAdapter;
+  vm.attachV2BitmapAdapter(bitmapAdapter);
+
+  const videoProvider = new VideoProvider();
+  Scratch.videoProvider = videoProvider;
+  vm.setVideoProvider(videoProvider);
+
+  const noop = () => null;
+  let ws;
+  function openConnection() {
+    try {
+      ws = new WebSocket({CLOUD_HOST});
+    } catch (err) {
+      console.warn(err);
+      return;
+    }
+    ws.onmessage = onMessage;
+    ws.onopen = onOpen;
+    ws.onclose = onClose;
+  }
+  function onMessage(e) {
+    e.data.split('\n').forEach(message => {
+      if (message) {
+        const { name, value } = JSON.parse(message)
+        vm.postIOData('cloud', {
+          varUpdate: {name, value}
+        });
+      }
+    });
+  }
+  function sendData(data) {
+    data.user = DESIRED_USERNAME;
+    data.project_id = PROJECT_ID;
+    ws.send(JSON.stringify(data) + '\n');
+  }
+  function onOpen() {
+    sendData({method: 'handshake'});
+  }
+  function onClose() {
+    setTimeout(openConnection, 500);
+  }
+  const cloudProvider = {
+    updateVariable(name, value) {
+      
+        
+        try {
+          localStorage.setItem('[s3] ' + name, value);
+        } catch (e) {
+          console.error('Cannot use localStorage?', e);
+        }
+        
+        
+        
+        
+    },
+    createVariable: noop,
+    renameVariable: noop,
+    deleteVariable: noop,
+    
+    
+    requestCloseConnection: noop
+    
+  };
+
+  vm.setCompatibilityMode(COMPAT);
+  vm.setTurboMode(TURBO);
+  
+
+  vm.start();
+
+  
+  const progress = document.getElementById('loading-progress');
+  const _load = storage.webHelper.load;
+  let total = 0, complete = 0;
+  storage.webHelper.load = function (...args) {
+    const result = _load.call(this, ...args);
+    total += 1;
+    progress.textContent = complete + '/' + total;
+    result.then(() => {
+      complete += 1;
+      progress.textContent = complete + '/' + total;
+    });
+    return result;
+  };
+  
+  
+  const loadingImage = document.getElementById('loading-image');
+  
+
+  // MOUSE
+  /* https://github.com/LLK/scratch-gui/blob/develop/src/containers/stage.jsx#L176-L300 */
+  const getEventXY = e => {
+    if (e.touches && e.touches[0]) {
+      return {x: e.touches[0].clientX, y: e.touches[0].clientY};
+    } else if (e.changedTouches && e.changedTouches[0]) {
+      return {x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY};
+    }
+    return {x: e.clientX, y: e.clientY};
+  };
+  let mouseDown = false,
+  mouseDownPosition = null,
+  mouseDownTimeoutId = null,
+  isDragging = false,
+  dragId = null,
+  dragOffset = null;
+  function cancelMouseDownTimeout() {
+    if (mouseDownTimeoutId !== null) {
+      clearTimeout(mouseDownTimeoutId);
+    }
+    mouseDownTimeoutId = null;
+  }
+  // https://github.com/LLK/scratch-gui/blob/develop/src/containers/stage.jsx#L337-L366
+  function onStartDrag() {
+    if (dragId) return;
+    const drawableId = renderer.pick(...mouseDownPosition);
+    if (drawableId === null) return;
+    const targetId = vm.getTargetIdForDrawableId(drawableId);
+    if (targetId === null) return;
+    const target = vm.runtime.getTargetById(targetId);
+    if (!target.draggable) return;
+    target.goToFront();
+    const drawableData = renderer.extractDrawable(drawableId, ...mouseDownPosition);
+    vm.startDrag(targetId);
+    isDragging = true;
+    dragId = targetId;
+    dragOffset = drawableData.scratchOffset;
+  }
+  function getScratchCoords(x, y, rect) {
+    const nativeSize = renderer.getNativeSize();
+    return [
+      (nativeSize[0] / rect.width) * (x - (rect.width / 2)),
+      (nativeSize[1] / rect.height) * (y - (rect.height / 2))
+    ];
+  }
+  
+  function mousemove(e) {
+    
+    const {x, y} = getEventXY(e);
+    const rect = canvas.getBoundingClientRect();
+    const mousePosition = [x - rect.left, y - rect.top];
+    if (mouseDown && !isDragging) {
+      const distanceFromMouseDown = Math.sqrt(
+        Math.pow(mousePosition[0] - mouseDownPosition[0], 2) +
+        Math.pow(mousePosition[1] - mouseDownPosition[1], 2)
+      );
+      if (distanceFromMouseDown > 3) {
+        cancelMouseDownTimeout();
+        onStartDrag();
+      }
+    }
+    if (mouseDown && isDragging) {
+      const spritePosition = getScratchCoords(mousePosition[0], mousePosition[1], rect);
+      vm.postSpriteInfo({
+        x: spritePosition[0] + dragOffset[0],
+        y: -(spritePosition[1] + dragOffset[1]),
+        force: true
+      });
+    }
+    vm.postIOData('mouse', {
+      x: mousePosition[0],
+      y: mousePosition[1],
+      canvasWidth: rect.width,
+      canvasHeight: rect.height
+    });
+  }
+  function mousedown(e) {
+    mouseDown = true;
+    
+    const {x, y} = getEventXY(e);
+    const rect = canvas.getBoundingClientRect();
+    const mousePosition = [x - rect.left, y - rect.top];
+    mouseDownPosition = mousePosition;
+    mouseDownTimeoutId = setTimeout(onStartDrag, 400);
+    vm.postIOData('mouse', {
+      isDown: true,
+      x: mousePosition[0],
+      y: mousePosition[1],
+      canvasWidth: rect.width,
+      canvasHeight: rect.height
+    });
+    e.preventDefault();
+    if (!document.body.classList.contains('asking')) {
+      window.focus();
+    }
+  }
+  function mouseup(e) {
+    cancelMouseDownTimeout();
+    mouseDown = false;
+    mouseDownPosition = null;
+    if (isDragging) {
+      vm.stopDrag(dragId);
+      isDragging = false;
+      dragOffset = null;
+      dragId = null;
+    }
+    
+    const {x, y} = getEventXY(e);
+    const rect = canvas.getBoundingClientRect();
+    vm.postIOData('mouse', {
+      isDown: false,
+      x: x - rect.left,
+      y: y - rect.top,
+      canvasWidth: rect.width,
+      canvasHeight: rect.height
+    });
+  }
+  document.addEventListener('mousemove', mousemove);
+  canvas.addEventListener('mousedown', mousedown);
+  document.addEventListener('mouseup', mouseup);
+  document.addEventListener('touchmove', mousemove);
+  canvas.addEventListener('touchstart', mousedown, {passive: false});
+  document.addEventListener('touchend', mouseup, {passive: false});
+  canvas.addEventListener('wheel', e => {
+    vm.postIOData('mouseWheel', {
+      deltaX: e.deltaX,
+      deltaY: e.deltaY
+    });
+    e.preventDefault();
+  });
+  window.addEventListener('resize', resize);
+  
+
+  // KEY PRESSED?
+  /* https://github.com/LLK/scratch-gui/blob/develop/src/lib/vm-listener-hoc.jsx#L86-L115 */
+  document.addEventListener('keydown', e => {
+    if (e.target !== document && e.target !== document.body) return;
+    const key = !e.key || e.key === 'Dead' ? e.keyCode : e.key;
+    vm.postIOData('keyboard', {
+      key: key,
+      isDown: true
+    });
+    if (e.keyCode === 32 || e.keyCode >= 37 && e.keyCode <= 40) {
+      e.preventDefault();
+    }
+  });
+  document.addEventListener('keyup', e => {
+    const key = !e.key || e.key === 'Dead' ? e.keyCode : e.key;
+    vm.postIOData('keyboard', {
+      key: key,
+      isDown: false
+    });
+    if (e.target !== document && e.target !== document.body) {
+      e.preventDefault();
+    }
+  });
+
+  // ASK AND WAIT
+  const question = document.getElementById('question');
+  const askBox = document.getElementById('answer');
+  vm.runtime.addListener('QUESTION', questionData => {
+    /* null means the asking was interrupted by stop script block */
+    if (questionData === null) {
+      document.body.classList.remove('asking');
+    } else {
+      document.body.classList.add('asking');
+      question.textContent = questionData;
+      askBox.value = '';
+      askBox.focus();
+    }
+  });
+  askBox.addEventListener('keydown', e => {
+    if (e.keyCode === 13) {
+      document.body.classList.remove('asking');
+      /* submit answer after because it starts the next question synchronously */
+      vm.runtime.emit('ANSWER', askBox.value);
+    }
+  });
+
+  // MONITORS
+  const getVariable = (targetId, variableId) => {
+      const target = targetId ?
+          vm.runtime.getTargetById(targetId) :
+          vm.runtime.getTargetForStage();
+      return target.variables[variableId];
+  };
+  const monitorStates = {};
+  let once = false;
+  vm.runtime.addListener('MONITORS_UPDATE', monitors => {
+    monitors.forEach((record, id) => {
+      if (!monitorStates[id]) {
+        const monitor = document.createElement('div');
+        monitor.className = 'monitor ' + record.mode;
+        monitor.style.left = record.x + 'px';
+        monitor.style.top = record.y + 'px';
+        if (record.mode === 'list') {
+          // If the list has never been resized, the width/height will be 0. Weird
+          monitor.style.width = (record.width || 100) + 'px';
+          monitor.style.height = (record.height || 200) + 'px';
+        }
+        const label = document.createElement('span');
+        label.className = 'monitor-label';
+        let name = record.params.VARIABLE || record.params.LIST || record.opcode;
+        if (record.spriteName) name = `${record.spriteName}: ${name}`;
+        label.textContent = name;
+        monitor.appendChild(label);
+        const value = document.createElement('span');
+        value.className = 'monitor-value';
+        monitor.appendChild(value);
+        monitorStates[id] = {monitor, value};
+        if (record.mode === 'slider') {
+          const slider = document.createElement('input');
+          slider.type = 'range';
+          slider.min = record.sliderMin;
+          slider.max = record.sliderMax;
+          slider.step = record.isDiscrete ? 1 : 0.01;
+          slider.addEventListener('input', e => {
+            getVariable(record.targetId, id).value = slider.value;
+          });
+          slider.addEventListener('change', e => {
+            getVariable(record.targetId, id).value = slider.value;
+          });
+          monitorStates[id].slider = slider;
+          monitor.appendChild(slider);
+        }
+        monitorWrapper.appendChild(monitor);
+      }
+      monitorStates[id].monitor.style.display = record.visible ? null : 'none';
+      if (record.visible) {
+        let value = record.value;
+        if (typeof value === 'number') {
+          value = Number(value.toFixed(6));
+        }
+        if (typeof value === 'boolean') {
+          value = value.toString();
+        }
+        if (Array.isArray(value)) {
+          if (monitorStates[id].lastValue === JSON.stringify(value)) return;
+          monitorStates[id].value.innerHTML = '';
+          value.forEach(val => {
+            const row = document.createElement('div');
+            row.className = 'row';
+            row.textContent = val;
+            monitorStates[id].value.appendChild(row);
+          });
+        } else {
+          monitorStates[id].value.textContent = value;
+          if (monitorStates[id].slider) monitorStates[id].slider.value = value;
+        }
+      }
+    });
+  });
+
+  vm.postIOData('userData', {username: DESIRED_USERNAME});
+
+  return Promise.resolve()
+
+    
+
+    .then(
+      () => TYPE === 'file'
+        ? fetch(FILE).then(r => r.arrayBuffer())
+        : storage.load(storage.AssetType.Project).then(asset => asset.data)
+    )
+    .then(data => vm.loadProject(data))
+
+    .then(() => {
+
+  vm.setCloudProvider(cloudProvider);
+  
+  const stageVariables = vm.runtime.getTargetForStage().variables;
+  for (const { name, isCloud } of Object.values(stageVariables)) {
+    if (isCloud) {
+      
+      const value = localStorage.getItem('[s3] ' + name);
+      if (value === null) continue;
+      vm.postIOData('cloud', { varUpdate: { name, value } });
+    }
+  }
+  window.addEventListener('storage', e => {
+    if (e.storageArea === localStorage && e.key.slice(0, 5) === '[s3] ') {
+      const name = e.key.slice(5);
+      
+      vm.postIOData('cloud', {
+        varUpdate: {
+          name,
+          value: e.newValue
+        }
+      });
+    }
+  });
+  
+  
+
+  
+  if (progress.parentNode) {
+  progress.parentNode.removeChild(progress);
+  }
+  
+  
+  if (loadingImage.parentNode) {
+  loadingImage.parentNode.removeChild(loadingImage);
+  }
+  document.body.classList.remove('loading');
+  
+
+  vm.greenFlag();
+
+    });
+};
+
+window.onload = function () {
+  runBenchmark();
+  window.focus();
+};
+
+
+function isFullscreen() {
+  return document.fullscreenElement || document.mozFullScreenElement
+    || document.webkitFullscreenElement || document.msFullscreenElement;
+}
+const fullscreenBtn = document.getElementById('fullscreen-btn');
+fullscreenBtn.addEventListener('click', e => {
+  fullscreenBtn.blur();
+  if (isFullscreen()) {
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.msExitFullscreen) document.msExitFullscreen();
+    else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+  } else {
+    if (document.body.requestFullscreen) document.body.requestFullscreen();
+    else if (document.body.msRequestFullscreen) document.body.msRequestFullscreen();
+    else if (document.body.mozRequestFullScreen) document.body.mozRequestFullScreen();
+    else if (document.body.webkitRequestFullscreen) document.body.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+  }
+});
+function onFullscreenChange() {
+  if (isFullscreen()) {
+    document.body.classList.add('fullscreen');
+  } else {
+    document.body.classList.remove('fullscreen');
+  }
+}
+document.addEventListener('fullscreenchange', onFullscreenChange);
+document.addEventListener('mozfullscreenchange', onFullscreenChange);
+document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+document.addEventListener('msfullscreenchange', onFullscreenChange);
+
+</script>
+</body>
+</html>
